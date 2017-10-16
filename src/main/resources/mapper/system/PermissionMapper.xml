@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springbootweb.modules.system.mapper.PermissionMapper">
+
+	<select id="listByUsername" parameterType="String" resultType="com.springbootweb.modules.system.pojo.Permission">
+		SELECT 
+			p.* 
+		from 
+			tb_sys_user u,tb_sys_user_role ur,tb_sys_role r, tb_sys_role_permission rp,tb_sys_permission p
+		where 
+			u.username=#{username}
+		AND 
+			u.id=ur.user_id 
+		and 
+			ur.role_id=r.id
+		and 
+			r.id=rp.role_id
+		and 
+			rp.permission_id=p.id
+	</select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+	<h1>Login</h1>
+	<br>
+	<form>
+		姓名：<input id="username" name="username"><br> 
+		密码：<input id="password" name="password"><br>
+		<button type="button" onclick="loginSubmit()"/>登录<br>
+	</form>
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript">
+		function loginSubmit(){
+			var username = $("#username").val();
+			var password = $("#password").val();
+			console.log(username);
+			$.ajax({
+				url : "/user/login",
+				type : "post",
+				data : {
+					username : username,
+					password : password
+				},
+				success : function(data){
+					console.log(data);
+					document.write(data.msg);
+				}
+			});
+			return false;
+		}
+	</script>
+</body>
+</html>
