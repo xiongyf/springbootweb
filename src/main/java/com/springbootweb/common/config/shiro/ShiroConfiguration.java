@@ -129,12 +129,10 @@ public class ShiroConfiguration {
 	 * @return
 	 */
 	@Bean(name = "shiroFilterFactoryBean")
-	public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager defaultWebSecurityManager,
-			SystemFormAuthenticationFilter systemFormAuthenticationFilter) {
+	public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager defaultWebSecurityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
-		shiroFilterFactoryBean.setLoginUrl("/login.html");
-		shiroFilterFactoryBean.setSuccessUrl("/index.html");
+		shiroFilterFactoryBean.setLoginUrl("/login.html");//未登录时重定向
 		shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
 
 		// 设置资源权限过滤
@@ -145,7 +143,6 @@ public class ShiroConfiguration {
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
 		Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
-		// filters.put("authc", systemFormAuthenticationFilter);// 添加身份验证过滤器
 		shiroFilterFactoryBean.setFilters(filters);
 
 		return shiroFilterFactoryBean;
@@ -159,10 +156,7 @@ public class ShiroConfiguration {
 	@Bean(name = "systemFormAuthenticationFilter")
 	public SystemFormAuthenticationFilter systemFormAuthenticationFilter() {
 		SystemFormAuthenticationFilter systemFormAuthenticationFilter = new SystemFormAuthenticationFilter();
-		systemFormAuthenticationFilter.setUsernameParam("username");
-		systemFormAuthenticationFilter.setPasswordParam("password");
 		systemFormAuthenticationFilter.setLoginUrl("/user/login");
-		systemFormAuthenticationFilter.setSuccessUrl("/");
 		return systemFormAuthenticationFilter;
 	}
 

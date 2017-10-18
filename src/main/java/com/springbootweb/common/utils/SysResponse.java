@@ -2,77 +2,84 @@ package com.springbootweb.common.utils;
 
 public class SysResponse {
 
-	private long timeStamp = System.currentTimeMillis();
-	private boolean success;
-	private String message;
-	private Object data;
+    private long timeStamp = System.currentTimeMillis();
+    private boolean success;
+    private String message;
+    private Object data;
 
-	public SysResponse() {
-		super();
-	}
+    public SysResponse() {
+        super();
+    }
 
-	public SysResponse(boolean success) {
-		super();
-		this.success = success;
-	}
+    public SysResponse(boolean success) {
+        super();
+        this.success = success;
+    }
 
-	public SysResponse(boolean success, String message) {
-		super();
-		this.success = success;
-		this.message = message;
-	}
+    public static SysResponse ok() {
+        return new SysResponse(true);
+    }
 
-	public SysResponse(boolean success, Object data) {
-		super();
-		this.success = success;
-		this.data = data;
-	}
+    public static SysResponse ok(String message) {
+        SysResponse sysResponse = new SysResponse(true);
+        sysResponse.setMessage(message);
+        return sysResponse;
+    }
 
-	public SysResponse(boolean success, String message, Object data) {
-		super();
-		this.success = success;
-		this.message = message;
-		this.data = data;
-	}
+    public static SysResponse ok(String message, Object data) {
+        SysResponse sysResponse = new SysResponse(true);
+        sysResponse.setMessage(message);
+        sysResponse.setData(data);
+        return sysResponse;
+    }
 
-	public SysResponse(long timeStamp, boolean success, String message, Object data) {
-		super();
-		this.timeStamp = timeStamp;
-		this.success = success;
-		this.message = message;
-		this.data = data;
-	}
+    public static SysResponse fail() {
+        return new SysResponse(false);
+    }
 
-	public long getTimeStamp() {
-		return timeStamp;
-	}
+    public static SysResponse fail(String message) {
+        SysResponse sysResponse = new SysResponse(true);
+        sysResponse.setMessage(message);
+        return sysResponse;
+    }
 
-	public void setTimeStamp(long timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    public static SysResponse fail(String message, Object data) {
+        SysResponse sysResponse = new SysResponse(true);
+        sysResponse.setMessage(message);
+        sysResponse.setData(data);
+        return sysResponse;
+    }
 
-	public boolean isSuccess() {
-		return success;
-	}
+    public long getTimeStamp() {
+        return timeStamp;
+    }
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public boolean isSuccess() {
+        return success;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
-	public Object getData() {
-		return data;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setData(Object data) {
-		this.data = data;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
 
 }

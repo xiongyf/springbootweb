@@ -1,9 +1,6 @@
 
 package com.springbootweb.modules.system.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.apache.shiro.SecurityUtils;
@@ -25,57 +22,60 @@ import com.springbootweb.modules.system.service.IUserService;
 @RequestMapping("/user")
 public class UserController {
 
-	@Value("${server.port}")
-	private String port;
+    @Value("${server.port}")
+    private String port;
 
-	@Resource(name = "userService")
-	private IUserService userService;
+    @Resource(name = "userService")
+    private IUserService userService;
 
-	@PostMapping("/login")
-	public Map<String, Object> login(@RequestParam String username, String password) {
-		Map<String, Object> map = new HashMap<>();
-		Subject subject = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-		try {
-			subject.login(token);
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-			map.put("state", 0);
-			map.put("msg", "Login fail");
-			return map;
-		}
-		map.put("state", 1);
-		map.put("msg", "Login seccess");
-		return map;
-	}
+    @PostMapping("/login")
+    public SysResponse login(@RequestParam String username, String password) {
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return SysResponse.fail("登录失败，用户名或密码不正确！");
+        }
+        String principal = (String) subject.getPrincipal();
+        if (username.equals(principal)) {//同一用户登录
+            return SysResponse.ok("登录成功");
+        }
+        subject.logout();//否则,原用户退出登录，新用户登录
+        try {
+            subject.login(new UsernamePasswordToken(username, password));
+            return SysResponse.ok("登录成功");
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            return SysResponse.fail("登录失败，用户名或密码不正确！");
+        }
+    }
 
-	@GetMapping("/logout")
-	public boolean logout() {
-		Subject subject = SecurityUtils.getSubject();
-		if (subject.isAuthenticated()) {
-			subject.logout();
-		}
-		return true;
-	}
 
-	@GetMapping("/unAuthenticated")
-	public SysResponse unAuthenticated() {
-		return new SysResponse(true, "Haven't logined");
-	}
+    @GetMapping("/logout")
+    public boolean logout() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            subject.logout();
+        }
+        return true;
+    }
 
-	@GetMapping("/getCurrentUser")
-	public User getCurrentUser() {
-		Subject subject = SecurityUtils.getSubject();
-		if (!subject.isAuthenticated()) {
-			return null;
-		}
-		String username = (String) subject.getPrincipal();
-		return userService.getUserByName(username);
-	}
+    @GetMapping("/unAuthenticated")
+    public SysResponse unAuthenticated() {
+        return SysResponse.fail("Haven't logined");
+    }
 
-	@GetMapping("/port")
-	public String port() {
-		return port;
-	}
+    @GetMapping("/getCurrentUser")
+    public User getCurrentUser() {
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.isAuthenticated()) {
+            return null;
+        }
+        String username = (String) subject.getPrincipal();
+        return userService.getUserByName(username);
+    }
+
+    @GetMapping("/port")
+    public String port() {
+        return port;
+    }
 
 }
